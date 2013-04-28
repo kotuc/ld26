@@ -35,6 +35,7 @@ public class Player extends DynamicPhysicsEntity implements PhysicsEntity.HasCon
     public static String TYPE = "Player";
 
     boolean dead = false;
+    boolean exitReached = false;
 
     public Player(PeaWorld peaWorld, World world, float x, float y, float angle) {
         super(peaWorld, world, x, y, 2 * RADIUS, 2 * RADIUS, angle);
@@ -78,6 +79,11 @@ public class Player extends DynamicPhysicsEntity implements PhysicsEntity.HasCon
             PlayN.log().debug("Ouch!");
             SOUND_OUCH.play();
             dead = true;
+        } else if (other instanceof Block) {
+            Block block = (Block) other;
+            if (!block.isCollidable()) {
+                exitReached = true;
+            }
         }
     }
 

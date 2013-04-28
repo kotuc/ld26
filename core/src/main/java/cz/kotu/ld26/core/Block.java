@@ -21,39 +21,44 @@ import org.jbox2d.dynamics.*;
 import playn.core.Image;
 
 public class Block extends DynamicPhysicsEntity {
-  public static String TYPE = "Block";
+    public static String TYPE = "Block";
 
-  public Block(final PeaWorld peaWorld, World world, float x, float y, float width, float height, float angle) {
-      super(peaWorld, world, x, y, width, height, angle);
-  }
+    public Block(final PeaWorld peaWorld, World world, float x, float y, float width, float height, float angle) {
+        super(peaWorld, world, x, y, width, height, angle);
+    }
 
-  @Override
-  Body initPhysicsBody(World world, float x, float y, float width, float height, float angle) {
-    FixtureDef fixtureDef = new FixtureDef();
-    BodyDef bodyDef = new BodyDef();
-    bodyDef.type = BodyType.STATIC;
-    bodyDef.position = new Vec2(0, 0);
-    Body body = world.createBody(bodyDef);
+    @Override
+    Body initPhysicsBody(World world, float x, float y, float width, float height, float angle) {
+        FixtureDef fixtureDef = new FixtureDef();
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyType.STATIC;
+        bodyDef.position = new Vec2(0, 0);
+        Body body = world.createBody(bodyDef);
 
-    PolygonShape polygonShape = new PolygonShape();
-    Vec2[] polygon = new Vec2[4];
-    polygon[0] = new Vec2(-getWidth()/2f, -getHeight()/2f);
-    polygon[1] = new Vec2(getWidth()/2f, -getHeight()/2f);
-    polygon[2] = new Vec2(getWidth()/2f, getHeight()/2f);
-    polygon[3] = new Vec2(-getWidth()/2f, getHeight()/2f);
-    polygonShape.set(polygon, polygon.length);
-    fixtureDef.shape = polygonShape;
-    fixtureDef.friction = 1f;
-    fixtureDef.restitution = 0.f;
-    body.createFixture(fixtureDef);
-    body.setTransform(new Vec2(x, y), angle);
-    return body;
-  }
+        fixtureDef.shape = createRectShape(getWidth(), getHeight());
+        fixtureDef.density = 1;
+        fixtureDef.friction = 1f;
+        fixtureDef.restitution = 0.f;
+        body.createFixture(fixtureDef);
+        body.setTransform(new Vec2(x, y), angle);
+        return body;
+    }
 
-  @Override
-  public Image getImage() {
-    return image;
-  }
+    static PolygonShape createRectShape(float width, float height) {
+        Vec2[] polygon = new Vec2[4];
+        polygon[0] = new Vec2(-width / 2f, -height / 2f);
+        polygon[1] = new Vec2(width / 2f, -height / 2f);
+        polygon[2] = new Vec2(width / 2f, height / 2f);
+        polygon[3] = new Vec2(-width / 2f, height / 2f);
+        PolygonShape polygonShape = new PolygonShape();
+        polygonShape.set(polygon, polygon.length);
+        return polygonShape;
+    }
 
-  private static Image image = loadImage("block.png");
+    @Override
+    public Image getImage() {
+        return image;
+    }
+
+    private static Image image = loadImage("block.png");
 }

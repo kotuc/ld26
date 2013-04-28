@@ -29,10 +29,6 @@ public class Spike extends DynamicPhysicsEntity {
 
     public static String TYPE = "Spike";
 
-    public static final Sound SOUND_FALL = PlayN.assets().getSound("sounds/fall");
-
-    float fallTime = Float.MAX_VALUE;
-
     public Spike(PeaWorld peaWorld, World world, float x, float y, float angle) {
         super(peaWorld, world, x, y, 1, 1, angle);
     }
@@ -86,20 +82,7 @@ public class Spike extends DynamicPhysicsEntity {
         return polygonShape;
     }
 
-    @Override
-    public void update(float delta) {
-        super.update(delta);
-        fallTime -= delta;
 
-
-        if (fallTime < 0 && getBody().getType() != BodyType.DYNAMIC) {
-            getBody().setType(BodyType.DYNAMIC);
-            SOUND_FALL.play();
-        }
-
-
-
-    }
 
     @Override
     public Image getImage() {
@@ -111,9 +94,6 @@ public class Spike extends DynamicPhysicsEntity {
     // private static Image chrome = loadImage("chrome.png");
 
 
-    public void setFallTime(float fallTime) {
-        this.fallTime = fallTime;
-    }
 }
 
 

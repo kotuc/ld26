@@ -24,24 +24,27 @@ import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 
 public abstract class Entity {
+
     ImageLayer layer;
+    private final PeaWorld world;
     float x;
     float y;
     private final float width;
     private final float height;
     float angle;
 
-    public Entity(final PeaWorld peaWorld, float px, float py, float pangle) {
-        this(peaWorld, px, py, 1, 1, pangle);
+    public Entity(final PeaWorld world, float px, float py, float pangle) {
+        this(world, px, py, 1, 1, pangle);
     }
 
-    public Entity(final PeaWorld peaWorld, float px, float py, final float width, final float height, float pangle) {
+    public Entity(final PeaWorld world, float px, float py, final float width, final float height, float pangle) {
+        this.world = world;
         this.x = px;
         this.y = py;
         this.width = width;
         this.height = height;
         this.angle = pangle;
-        initLayer(peaWorld, width, height);
+        initLayer(world, width, height);
     }
 
     protected void initLayer(final PeaWorld peaWorld, final float width, final float height) {
@@ -106,4 +109,10 @@ public abstract class Entity {
     protected static Image loadImage(String name) {
         return assets().getImage("images/" + name);
     }
+
+    public PeaWorld getWorld() {
+        return world;
+    }
 }
+
+

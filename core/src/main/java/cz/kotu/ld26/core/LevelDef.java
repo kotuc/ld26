@@ -26,16 +26,21 @@ public abstract class LevelDef {
                 world.add(new Block(world, world.world, 5, 5, 1, 1, 20));
 
 
-                player = new Player(world, world.world, 3, 10, 0);
+                player = new Player(world, world.world, 0.5f, 10, 0);
                 world.add(player);
 
 //        world.add(new Block(world, world.world, 5+5, 13, 15, 1, 0));
 
-                world.createBlock(10, 2, 1, 5);
 
+                world.createBlock(10, 2, 1, 5);
                 world.createBlock(10, 2 + 5 + 1, 1, 5).setCollidable(false);
 
-                world.createBlock(2, 13, 18 - 2, 1);
+
+                world.createBlock(2, 13, 9 - 2, 1);
+
+                for (int i = 0; i < 5; i++) {
+                    world.createBlock(12+i, 13, 1, 1).setFallTime(5+i*0.2f);
+                }
 
                 Spike spike = new Spike(world, world.world, 3f + 15f, 1, 0);
                 spike.setFallTime(5);

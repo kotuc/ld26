@@ -17,18 +17,21 @@ package cz.kotu.ld26.core;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.World;
+import playn.core.PlayN;
+import playn.core.Sound;
 
 public abstract class DynamicPhysicsEntity extends Entity implements PhysicsEntity {
+    public static final Sound SOUND_FALL = PlayN.assets().getSound("sounds/fall");
+    float fallTime = Float.MAX_VALUE;
     // for calculating interpolation
     private float prevX, prevY, prevA;
     private Body body;
-    private World pworld;
     private boolean collidable = true;
 
     public DynamicPhysicsEntity(PeaWorld peaWorld, World world, float x, float y, float width, float height, float angle) {
         super(peaWorld, x, y, width, height, angle);
-        this.pworld = world;
         body = initPhysicsBody(world, x, y, width, height, angle);
         setPos(x, y);
         setAngle(angle);
@@ -55,7 +58,14 @@ public abstract class DynamicPhysicsEntity extends Entity implements PhysicsEnti
 
         body.getFixtureList().getFilterData().categoryBits = (collidable)?1:0;
 
+        fallTime -= delta;
+
+        if (fallTime < 0 && getBody().getType() != BodyType.DYNAMIC) {
+            getBody().setType(BodyType.DYNAMIC);
+            SOUND_FALL.play();
+        }
     }
+
 
     @Override
     public void initPreLoad(final PeaWorld peaWorld) {
@@ -98,5 +108,13 @@ public abstract class DynamicPhysicsEntity extends Entity implements PhysicsEnti
     public void setCollidable(boolean collidable) {
         this.collidable = collidable;
         layer.setAlpha(collidable?1f:0.5f);
+    }
+
+    public boolean isCollidable() {
+        return collidable;
+    }
+
+    public void setFallTime(float fallTime) {
+        this.fallTime = fallTime;
     }
 }

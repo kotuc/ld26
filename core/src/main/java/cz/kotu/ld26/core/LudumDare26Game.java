@@ -170,7 +170,11 @@ public class LudumDare26Game extends Game.Default {
 
             if (level.player.dead) {
                 resetLevel(levelNum);
+            } else if (level.player.getBody().getPosition().x > 20) {
+                resetLevel(levelNum + 1);
             }
+
+
 
             t += delta;
 
