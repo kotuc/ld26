@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ld26.iml" filepath="$PROJECT_DIR$/ld26.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/ld26-android.iml" filepath="$PROJECT_DIR$/android/ld26-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/assets/ld26-assets.iml" filepath="$PROJECT_DIR$/assets/ld26-assets.iml" />
+      <module fileurl="file://$PROJECT_DIR$/core/ld26-core.iml" filepath="$PROJECT_DIR$/core/ld26-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flash/ld26-flash.iml" filepath="$PROJECT_DIR$/flash/ld26-flash.iml" />
+      <module fileurl="file://$PROJECT_DIR$/html/ld26-html.iml" filepath="$PROJECT_DIR$/html/ld26-html.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ios/ld26-ios.iml" filepath="$PROJECT_DIR$/ios/ld26-ios.iml" />
+      <module fileurl="file://$PROJECT_DIR$/java/ld26-java.iml" filepath="$PROJECT_DIR$/java/ld26-java.iml" />
+    </modules>
+  </component>
+</project>
+

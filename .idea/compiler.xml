@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="Javac" />
+    <resourceExtensions />
+    <wildcardResourcePatterns>
+      <entry name="?*.properties" />
+      <entry name="?*.xml" />
+      <entry name="?*.gif" />
+      <entry name="?*.png" />
+      <entry name="?*.jpeg" />
+      <entry name="?*.jpg" />
+      <entry name="?*.html" />
+      <entry name="?*.dtd" />
+      <entry name="?*.tld" />
+      <entry name="?*.ftl" />
+    </wildcardResourcePatterns>
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="false">
+        <processorPath useClasspath="true" />
+      </profile>
+      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="ld26-android" />
+        <module name="ld26-assets" />
+        <module name="ld26-core" />
+        <module name="ld26-flash" />
+        <module name="ld26-html" />
+        <module name="ld26-java" />
+      </profile>
+      <profile default="false" name="Annotation profile for ld26-ios" enabled="true">
+        <sourceOutputDir name="bin\generated-sources\annotations" />
+        <sourceTestOutputDir name="bin\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="ld26-ios" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ld26" target="1.6" />
+      <module name="ld26-android" target="1.6" />
+      <module name="ld26-assets" target="1.6" />
+      <module name="ld26-core" target="1.6" />
+      <module name="ld26-flash" target="1.6" />
+      <module name="ld26-html" target="1.6" />
+      <module name="ld26-ios" target="1.6" />
+      <module name="ld26-java" target="1.6" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
+
