@@ -13,6 +13,10 @@ public class LudumDare26Game extends Game.Default {
     public static final int physUnitPerScreenUnit = 32;
     private GroupLayer worldLayer;
     private boolean worldLoaded = true;
+    private Font font;
+    private Canvas canvas;
+
+    int t = 0;
 
     public LudumDare26Game() {
         super(33); // call update every 33ms (30 times per second)
@@ -46,15 +50,16 @@ public class LudumDare26Game extends Game.Default {
 //        imm.setScale(2);
 //        graphics().rootLayer().add(imm);
 
-        Font font = graphics().createFont("Courier", Font.Style.BOLD, 16);
+        font = graphics().createFont("Courier", Font.Style.BOLD, 16);
         String text = "Text can also be wrapped at a specified width.\n\n" +
                 "And wrapped manually at newlines.\nLike this.";
         TextLayout layout = graphics().layoutText(
                 text, new TextFormat().withFont(font).withWrapWidth(200));
 
         CanvasImage image = graphics().createImage(layout.width(), layout.height());
-        image.canvas().setFillColor(0xFFFF0066);
-        image.canvas().fillText(layout, 0, 0);
+        canvas = image.canvas();
+        canvas.setFillColor(0xFFFF0066);
+        canvas.fillText(layout, 0, 0);
         ImageLayer textLayer = graphics().createImageLayer(image);
         graphics().rootLayer().add(textLayer);
 
@@ -84,12 +89,10 @@ public class LudumDare26Game extends Game.Default {
         keyboard().setListener(new Keyboard.Listener() {
             @Override
             public void onKeyDown(Keyboard.Event event) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
             public void onKeyTyped(Keyboard.TypedEvent event) {
-                //To change body of implemented methods use File | Settings | File Templates.
             }
 
             @Override
@@ -119,7 +122,22 @@ public class LudumDare26Game extends Game.Default {
     @Override
     public void update(int delta) {
         if (worldLoaded) {
+
+            t += delta;
+
             world.update(delta);
+
+            updateText("t" + t + "delta " + delta);
+
         }
     }
+
+
+    void updateText(String text) {
+        TextLayout layout = graphics().layoutText(
+                text, new TextFormat().withFont(font).withWrapWidth(200));
+        canvas.clear();
+        canvas.fillText(layout, 0, 0);
+    }
+
 }
