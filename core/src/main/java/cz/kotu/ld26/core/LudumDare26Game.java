@@ -181,7 +181,7 @@ public class LudumDare26Game extends Game.Default {
 
         t = 0;
 
-        world.add(new Block(world, world.world, 0, 0, 2, 1, 0));
+        world.add(new Block(world, world.world, 1, 1, 2, 1, 0));
 
         world.add(new Block(world, world.world, 5, 5, 1, 1, 20));
 
@@ -211,10 +211,6 @@ public class LudumDare26Game extends Game.Default {
             playerControl(delta);
 
             world.update(delta);
-
-            if (t > 10000) {
-                spike.getBody().setType(BodyType.DYNAMIC);
-            }
 
             updateText("t" + t + "delta " + delta);
 

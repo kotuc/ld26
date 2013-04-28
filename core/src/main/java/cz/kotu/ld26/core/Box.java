@@ -25,10 +25,11 @@ public class Box extends DynamicPhysicsEntity {
 
     public static String TYPE = "Player";
 
+    float fallTime = Float.MAX_VALUE;
+
     public Box(PeaWorld peaWorld, World world, float x, float y, float angle) {
         super(peaWorld, world, x, y, 1, 1, angle);
     }
-
 
     @Override
     Body initPhysicsBody(World world, float x, float y, float angle) {
@@ -53,6 +54,15 @@ public class Box extends DynamicPhysicsEntity {
         return body;
     }
 
+    @Override
+    public void update(float delta) {
+        super.update(delta);
+        fallTime -= delta;
+
+
+        getBody().setType((fallTime < 0)?BodyType.DYNAMIC:BodyType.KINEMATIC);
+
+    }
 
     @Override
     public Image getImage() {
@@ -62,4 +72,11 @@ public class Box extends DynamicPhysicsEntity {
 
     private static Image image = loadImage("spikev.png");
     // private static Image chrome = loadImage("chrome.png");
+
+
+    public void setFallTime(float fallTime) {
+        this.fallTime = fallTime;
+    }
 }
+
+
