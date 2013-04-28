@@ -4,6 +4,7 @@ import static playn.core.PlayN.*;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
+import org.jbox2d.dynamics.BodyType;
 import playn.core.*;
 
 public class LudumDare26Game extends Game.Default {
@@ -26,6 +27,7 @@ public class LudumDare26Game extends Game.Default {
 
     private int t = 0;
     private Player player;
+    private Box spike;
 
     public LudumDare26Game() {
         super(33); // call update every 33ms (30 times per second)
@@ -58,23 +60,13 @@ public class LudumDare26Game extends Game.Default {
 //        imm.setScale(2);
 //        graphics().rootLayer().add(imm);
 
-        font = graphics().createFont("Courier", Font.Style.BOLD, 16);
-        String text = "Text can also be wrapped at a specified width.\n\n" +
-                "And wrapped manually at newlines.\nLike this.";
-        TextLayout layout = graphics().layoutText(
-                text, new TextFormat().withFont(font).withWrapWidth(200));
-
-        CanvasImage image = graphics().createImage(layout.width(), layout.height());
-        canvas = image.canvas();
-        canvas.setFillColor(0xFFFF0066);
-        canvas.fillText(layout, 0, 0);
-        ImageLayer textLayer = graphics().createImageLayer(image);
-        graphics().rootLayer().add(textLayer);
 
         // create our world layer (scaled to "world space")
         worldLayer = graphics().createGroupLayer();
         worldLayer.setScale(physUnitPerScreenUnit);
         graphics().rootLayer().add(worldLayer);
+
+        initTextLayer();
 
         world = new PeaWorld(worldLayer);
 
@@ -122,6 +114,12 @@ public class LudumDare26Game extends Game.Default {
             @Override
             public void onKeyUp(Keyboard.Event event) {
                 switch (event.key()) {
+                    case K1:
+                        initLevel1();
+                        break;
+                    case K2:
+                        initLevel2();
+                        break;
                     case LEFT:
                         controlsState.leftPressed = false;
                         break;
@@ -135,7 +133,27 @@ public class LudumDare26Game extends Game.Default {
 
     }
 
+    private void initTextLayer() {
+        font = graphics().createFont("Courier", Font.Style.BOLD, 16);
+        String text = "Text can also be wrapped at a specified width.\n\n" +
+                "And wrapped manually at newlines.\nLike this.";
+        TextLayout layout = graphics().layoutText(
+                text, new TextFormat().withFont(font).withWrapWidth(200));
+
+        CanvasImage image = graphics().createImage(layout.width(), layout.height());
+        canvas = image.canvas();
+        canvas.setFillColor(0xFFFF0066);
+        canvas.fillText(layout, 0, 0);
+        ImageLayer textLayer = graphics().createImageLayer(image);
+        graphics().rootLayer().add(textLayer);
+    }
+
     private void initLevel1() {
+
+        world.clearInit();
+
+        t = 0;
+
         world.add(new Block(world, world.world, 1, 1, 1, 1, 0));
         world.add(new Block(world, world.world, 0, 0, 1, 1, 0));
 
@@ -151,7 +169,31 @@ public class LudumDare26Game extends Game.Default {
         world.add(new Block(world, world.world, 3f + 3f, 10, 3, 1, 0));
 
         world.add(new Block(world, world.world, 3f + 15f, 10, 3, 1, 0));
+
+        spike = new Box(world, world.world, 3f + 15f, 1, 0);
+
+        world.add(spike);
     }
+
+    private void initLevel2() {
+
+        world.clearInit();
+
+        t = 0;
+
+        world.add(new Block(world, world.world, 0, 0, 2, 1, 0));
+
+        world.add(new Block(world, world.world, 5, 5, 1, 1, 20));
+
+
+        player = new Player(world, world.world, 3, 10, 0);
+        world.add(player);
+
+        spike = new Box(world, world.world, 3f + 15f, 1, 0);
+
+        world.add(spike);
+    }
+
 
     @Override
     public void paint(float alpha) {
@@ -164,11 +206,15 @@ public class LudumDare26Game extends Game.Default {
     public void update(int delta) {
         if (worldLoaded) {
 
-            playerControl(delta);
-
             t += delta;
 
+            playerControl(delta);
+
             world.update(delta);
+
+            if (t > 10000) {
+                spike.getBody().setType(BodyType.DYNAMIC);
+            }
 
             updateText("t" + t + "delta " + delta);
 
@@ -191,7 +237,7 @@ public class LudumDare26Game extends Game.Default {
             Vec2 linearVelocity = body.getLinearVelocity();
             final int dir = (controlsState.leftPressed ? -1 : 0) + (controlsState.rightPressed ? 1 : 0);
             float v = linearVelocity.x;
-            v += dir*MOVE_ACC;
+            v += dir * MOVE_ACC;
             v = Math.max(-MOVE_SPEED, Math.min(v, MOVE_SPEED));
             linearVelocity.x = v;
 //                body.applyForce(new Vec2(v, 0), body.getPosition());
