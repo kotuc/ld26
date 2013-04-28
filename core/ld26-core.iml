@@ -13,6 +13,7 @@
     <orderEntry type="library" name="Maven: org.jbox2d:jbox2d-library:2.2.1.1" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.playn:playn-core:1.7" level="project" />
     <orderEntry type="library" name="Maven: com.samskivert:pythagoras:1.3.2" level="project" />
+    <orderEntry type="library" name="Maven: org.jbox2d:jbox2d-library:sources:2.2.1.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.11" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
   </component>

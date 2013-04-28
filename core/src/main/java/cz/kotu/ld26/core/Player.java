@@ -41,11 +41,11 @@ public class Player extends DynamicPhysicsEntity {
         circleShape.m_radius = RADIUS;
         fixtureDef.shape = circleShape;
         fixtureDef.density = 0.4f;
-        fixtureDef.friction = 0.1f;
+        fixtureDef.friction = 1f;
         fixtureDef.restitution = 0.0f;
         circleShape.m_p.set(0, 0);
         body.createFixture(fixtureDef);
-        body.setLinearDamping(0.2f);
+//        body.setLinearDamping(0.2f);
         body.setTransform(new Vec2(x, y), angle);
         return body;
     }

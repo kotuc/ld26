@@ -44,8 +44,8 @@ public class Block extends StaticPhysicsEntity {
     polygon[3] = new Vec2(-getWidth()/2f, getHeight()/2f);
     polygonShape.set(polygon, polygon.length);
     fixtureDef.shape = polygonShape;
-    fixtureDef.friction = 0.1f;
-    fixtureDef.restitution = 0.8f;
+    fixtureDef.friction = 1f;
+    fixtureDef.restitution = 0.f;
     body.createFixture(fixtureDef);
     body.setTransform(new Vec2(x, y), angle);
     return body;

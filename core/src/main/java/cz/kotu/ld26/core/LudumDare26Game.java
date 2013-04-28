@@ -3,13 +3,15 @@ package cz.kotu.ld26.core;
 import static playn.core.PlayN.*;
 
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.Body;
 import playn.core.*;
 
 public class LudumDare26Game extends Game.Default {
 
-    public static final float GRAVITY = 50;
+    public static final float GRAVITY = 80;
     public static final float JUMP_SPEED = -20f;
-    public static final float MOVE_SPEED = 7.5f;
+    public static final float MOVE_SPEED = 10f;
+    public static final float MOVE_ACC = 5f;
     private PeaWorld world;
 
     public static final int WIDTH = 640;
@@ -22,7 +24,7 @@ public class LudumDare26Game extends Game.Default {
 
     private LudumDare26Game.ControlsState controlsState = new ControlsState();
 
-    int t = 0;
+    private int t = 0;
     private Player player;
 
     public LudumDare26Game() {
@@ -76,14 +78,7 @@ public class LudumDare26Game extends Game.Default {
 
         world = new PeaWorld(worldLayer);
 
-        world.add(new Block(world, world.world, 5, 5, 1, 1, 20));
-
-        player = new Player(world, world.world, 3, 10, 0);
-        world.add(player);
-
-        world.add(new Block(world, world.world, 3, 12, 1, 1, 0));
-
-        world.add(new Block(world, world.world, 3 + 8, 12, 3, 1, 0));
+        initLevel1();
 
         // hook up our pointer listener
         pointer().setListener(new Pointer.Adapter() {
@@ -109,8 +104,7 @@ public class LudumDare26Game extends Game.Default {
                     case RIGHT:
                         controlsState.rightPressed = true;
                         break;
-                    case UP:
-                    {
+                    case UP: {
                         Vec2 linearVelocity = player.getBody().getLinearVelocity();
                         linearVelocity.y = JUMP_SPEED;
                         player.getBody().setLinearVelocity(linearVelocity);
@@ -141,6 +135,24 @@ public class LudumDare26Game extends Game.Default {
 
     }
 
+    private void initLevel1() {
+        world.add(new Block(world, world.world, 1, 1, 1, 1, 0));
+        world.add(new Block(world, world.world, 0, 0, 1, 1, 0));
+
+        world.add(new Block(world, world.world, 5, 5, 1, 1, 20));
+
+        player = new Player(world, world.world, 3, 10, 0);
+        world.add(player);
+
+        world.add(new Block(world, world.world, 3, 12, 1, 1, 0));
+
+        world.add(new Block(world, world.world, 3 + 8, 12, 3, 1, 0));
+
+        world.add(new Block(world, world.world, 3f + 3f, 10, 3, 1, 0));
+
+        world.add(new Block(world, world.world, 3f + 15f, 10, 3, 1, 0));
+    }
+
     @Override
     public void paint(float alpha) {
         if (worldLoaded) {
@@ -152,9 +164,7 @@ public class LudumDare26Game extends Game.Default {
     public void update(int delta) {
         if (worldLoaded) {
 
-            Vec2 linearVelocity = player.getBody().getLinearVelocity();
-            linearVelocity.x = (controlsState.leftPressed?-MOVE_SPEED :0)+(controlsState.rightPressed? MOVE_SPEED :0);
-            player.getBody().setLinearVelocity(linearVelocity);
+            playerControl(delta);
 
             t += delta;
 
@@ -163,6 +173,32 @@ public class LudumDare26Game extends Game.Default {
             updateText("t" + t + "delta " + delta);
 
         }
+    }
+
+    private void playerControl(int delta) {
+        boolean doStop = !(controlsState.leftPressed || controlsState.rightPressed);
+
+        final Body body = player.getBody();
+        float linearDamping = 0;
+        if (doStop) {
+            body.setAngularVelocity(0);
+//                linearDamping = 10f;
+            Vec2 linearVelocity = body.getLinearVelocity();
+            linearVelocity.x *= 0.9;
+//                body.applyForce(new Vec2(v, 0), body.getPosition());
+            body.setLinearVelocity(linearVelocity);
+        } else {
+            Vec2 linearVelocity = body.getLinearVelocity();
+            final int dir = (controlsState.leftPressed ? -1 : 0) + (controlsState.rightPressed ? 1 : 0);
+            float v = linearVelocity.x;
+            v += dir*MOVE_ACC;
+            v = Math.max(-MOVE_SPEED, Math.min(v, MOVE_SPEED));
+            linearVelocity.x = v;
+//                body.applyForce(new Vec2(v, 0), body.getPosition());
+            body.setLinearVelocity(linearVelocity);
+//                linearDamping = 1f;
+        }
+        body.setLinearDamping(linearDamping);
     }
 
 
