@@ -86,6 +86,6 @@ public abstract class Entity {
   public abstract Image getImage();
 
   protected static Image loadImage(String name) {
-    return assets().getImage("peas/images/" + name);
+    return assets().getImage("images/" + name);
   }
 }

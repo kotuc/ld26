@@ -6,10 +6,13 @@ import playn.core.*;
 
 public class LudumDare26Game extends Game.Default {
 
+    private PeaWorld world;
 
     public static final int WIDTH = 640;
     public static final int HEIGHT = 480;
     public static final int physUnitPerScreenUnit = 32;
+    private GroupLayer worldLayer;
+    private boolean worldLoaded = true;
 
     public LudumDare26Game() {
         super(33); // call update every 33ms (30 times per second)
@@ -39,7 +42,7 @@ public class LudumDare26Game extends Game.Default {
         });
 //        imm.setAlpha(1f);
         imm.setTranslation(50, 50);
-        imm.setScale(10);
+        imm.setScale(2);
         graphics().rootLayer().add(imm);
 
         Font font = graphics().createFont("Courier", Font.Style.BOLD, 16);
@@ -55,14 +58,38 @@ public class LudumDare26Game extends Game.Default {
         ImageLayer textLayer = graphics().createImageLayer(image);
         graphics().rootLayer().add(textLayer);
 
-    }
+        // create our world layer (scaled to "world space")
+        worldLayer = graphics().createGroupLayer();
+        worldLayer.setScale(physUnitPerScreenUnit);
+        graphics().rootLayer().add(worldLayer);
 
-    @Override
-    public void update(int delta) {
+        world = new PeaWorld(worldLayer);
+
+        // hook up our pointer listener
+        pointer().setListener(new Pointer.Adapter() {
+            @Override
+            public void onPointerStart(Pointer.Event event) {
+                if (worldLoaded) {
+                    Pea pea = new Pea(world, world.world, event.x() / physUnitPerScreenUnit,
+                            event.y() / physUnitPerScreenUnit, 0);
+                    world.add(pea);
+                }
+            }
+        });
+
     }
 
     @Override
     public void paint(float alpha) {
-        // the background automatically paints itself, so no need to do anything here!
+        if (worldLoaded) {
+            world.paint(alpha);
+        }
+    }
+
+    @Override
+    public void update(int delta) {
+        if (worldLoaded) {
+            world.update(delta);
+        }
     }
 }
