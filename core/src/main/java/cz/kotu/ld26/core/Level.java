@@ -1,33 +1,32 @@
 package cz.kotu.ld26.core;
 
-import static playn.core.PlayN.*;
-
 import playn.core.*;
 
-public class LudumDare26Game extends Game.Default {
+import static playn.core.PlayN.assets;
+import static playn.core.PlayN.graphics;
+import static playn.core.PlayN.random;
 
+/**
+ * @author Kotuc
+ */
+public class Level {
 
-    public static final int WIDTH = 640;
-    public static final int HEIGHT = 480;
-    public static final int physUnitPerScreenUnit = 32;
+    final int pixelunit = 32;
+    final int width = 20;
+    final int height = 15;
 
-    public LudumDare26Game() {
-        super(33); // call update every 33ms (30 times per second)
-    }
-
-    @Override
     public void init() {
         // create and add background image layer
         Image bgImage = assets().getImage("images/bg.png");
         ImageLayer bgLayer = graphics().createImageLayer(bgImage);
         graphics().rootLayer().add(bgLayer);
         final Image pea = assets().getImage("images/pea.png");
-        ImmediateLayer imm = graphics().createImmediateLayer(WIDTH, HEIGHT, new ImmediateLayer.Renderer() {
+        ImmediateLayer imm = graphics().createImmediateLayer(width, height, new ImmediateLayer.Renderer() {
             public void render(Surface surf) {
 //                surf.clear();
                 for (int i = 0; i < 100; ++i) {
-                    int x = (int) (random() * WIDTH);
-                    int y = (int) (random() * HEIGHT);
+                    int x = (int) (random() * height);
+                    int y = (int) (random() * width);
                     surf.drawImage(pea, x, y);
                 }
 
@@ -57,12 +56,13 @@ public class LudumDare26Game extends Game.Default {
 
     }
 
-    @Override
     public void update(int delta) {
+
     }
 
-    @Override
     public void paint(float alpha) {
         // the background automatically paints itself, so no need to do anything here!
     }
+
+
 }
