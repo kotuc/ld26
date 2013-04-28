@@ -2,10 +2,14 @@ package cz.kotu.ld26.core;
 
 import static playn.core.PlayN.*;
 
+import org.jbox2d.common.Vec2;
 import playn.core.*;
 
 public class LudumDare26Game extends Game.Default {
 
+    public static final float GRAVITY = 50;
+    public static final float JUMP_SPEED = -20f;
+    public static final float MOVE_SPEED = 7.5f;
     private PeaWorld world;
 
     public static final int WIDTH = 640;
@@ -16,7 +20,10 @@ public class LudumDare26Game extends Game.Default {
     private Font font;
     private Canvas canvas;
 
+    private LudumDare26Game.ControlsState controlsState = new ControlsState();
+
     int t = 0;
+    private Player player;
 
     public LudumDare26Game() {
         super(33); // call update every 33ms (30 times per second)
@@ -28,7 +35,6 @@ public class LudumDare26Game extends Game.Default {
         Image bgImage = assets().getImage("images/bg.png");
         ImageLayer bgLayer = graphics().createImageLayer(bgImage);
         graphics().rootLayer().add(bgLayer);
-        final Image pea = assets().getImage("images/pea.png");
         ImmediateLayer imm = graphics().createImmediateLayer(WIDTH, HEIGHT, new ImmediateLayer.Renderer() {
             public void render(Surface surf) {
 //                surf.clear();
@@ -70,17 +76,24 @@ public class LudumDare26Game extends Game.Default {
 
         world = new PeaWorld(worldLayer);
 
-        world.add(new Block(world, world.world, 5, 5, 0));
+        world.add(new Block(world, world.world, 5, 5, 1, 1, 20));
+
+        player = new Player(world, world.world, 3, 10, 0);
+        world.add(player);
+
+        world.add(new Block(world, world.world, 3, 12, 1, 1, 0));
+
+        world.add(new Block(world, world.world, 3 + 8, 12, 3, 1, 0));
 
         // hook up our pointer listener
         pointer().setListener(new Pointer.Adapter() {
             @Override
             public void onPointerStart(Pointer.Event event) {
                 if (worldLoaded) {
-                    Pea pea = new Pea(world, world.world,
+                    Player player = new Player(world, world.world,
                             event.x() / physUnitPerScreenUnit,
                             event.y() / physUnitPerScreenUnit, 0);
-                    world.add(pea);
+                    world.add(player);
                 }
             }
         });
@@ -89,6 +102,23 @@ public class LudumDare26Game extends Game.Default {
         keyboard().setListener(new Keyboard.Listener() {
             @Override
             public void onKeyDown(Keyboard.Event event) {
+                switch (event.key()) {
+                    case LEFT:
+                        controlsState.leftPressed = true;
+                        break;
+                    case RIGHT:
+                        controlsState.rightPressed = true;
+                        break;
+                    case UP:
+                    {
+                        Vec2 linearVelocity = player.getBody().getLinearVelocity();
+                        linearVelocity.y = JUMP_SPEED;
+                        player.getBody().setLinearVelocity(linearVelocity);
+
+                        break;
+                    }
+
+                }
             }
 
             @Override
@@ -99,12 +129,11 @@ public class LudumDare26Game extends Game.Default {
             public void onKeyUp(Keyboard.Event event) {
                 switch (event.key()) {
                     case LEFT:
-                        world.add(new Block(world, world.world, 3, 5, 0));
+                        controlsState.leftPressed = false;
                         break;
                     case RIGHT:
-                        world.add(new Block(world, world.world, 7, 5, 0));
+                        controlsState.rightPressed = false;
                         break;
-
                 }
             }
         });
@@ -123,6 +152,10 @@ public class LudumDare26Game extends Game.Default {
     public void update(int delta) {
         if (worldLoaded) {
 
+            Vec2 linearVelocity = player.getBody().getLinearVelocity();
+            linearVelocity.x = (controlsState.leftPressed?-MOVE_SPEED :0)+(controlsState.rightPressed? MOVE_SPEED :0);
+            player.getBody().setLinearVelocity(linearVelocity);
+
             t += delta;
 
             world.update(delta);
@@ -139,5 +172,14 @@ public class LudumDare26Game extends Game.Default {
         canvas.clear();
         canvas.fillText(layout, 0, 0);
     }
+
+    class ControlsState {
+
+        boolean leftPressed = false;
+        boolean rightPressed = false;
+
+
+    }
+
 
 }

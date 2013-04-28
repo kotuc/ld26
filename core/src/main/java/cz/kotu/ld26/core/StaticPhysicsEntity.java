@@ -21,12 +21,12 @@ import org.jbox2d.dynamics.World;
 public abstract class StaticPhysicsEntity extends Entity implements PhysicsEntity {
   private Body body;
 
-  public StaticPhysicsEntity(final PeaWorld peaWorld, World world, float x, float y, float angle) {
-    super(peaWorld, x, y, angle);
-    body = initPhysicsBody(world, x, y, angle);
+  public StaticPhysicsEntity(final PeaWorld peaWorld, World world, float x, float y, float width, float height, float angle) {
+    super(peaWorld, x, y, width, height, angle);
+    body = initPhysicsBody(world, x, y, width, height, angle);
   }
 
-  abstract Body initPhysicsBody(World world, float x, float y, float angle);
+  abstract Body initPhysicsBody(World world, float x, float y, float width, float height, float angle);
 
   @Override
   public void paint(float alpha) {

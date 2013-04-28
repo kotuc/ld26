@@ -24,68 +24,82 @@ import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 
 public abstract class Entity {
-  final ImageLayer layer;
-  float x, y, angle;
+    final ImageLayer layer;
+    float x;
+    float y;
+    private final float width;
+    private final float height;
+    float angle;
 
-  public Entity(final PeaWorld peaWorld, float px, float py, float pangle) {
-    this.x = px;
-    this.y = py;
-    this.angle = pangle;
-    layer = graphics().createImageLayer(getImage());
-    initPreLoad(peaWorld);
-    getImage().addCallback(new Callback<Image>() {
-        @Override
-        public void onSuccess(Image image) {
-            // since the image is loaded, we can use its width and height
-            layer.setOrigin(image.width() / 2f, image.height() / 2f);
-            layer.setScale(getWidth() / image.width(), getHeight() / image.height());
-            layer.setTranslation(x, y);
-            layer.setRotation(angle);
-            initPostLoad(peaWorld);
-        }
+    public Entity(final PeaWorld peaWorld, float px, float py, float pangle) {
+           this(peaWorld, px, py, 1, 1, pangle);
+    }
 
-        @Override
-        public void onFailure(Throwable cause) {
-            PlayN.log().error("Error loading image: " + cause.getMessage());
-        }
-    });
-  }
+    public Entity(final PeaWorld peaWorld, float px, float py, final float width, final float height, float pangle) {
+        this.x = px;
+        this.y = py;
+        this.width = width;
+        this.height = height;
+        this.angle = pangle;
+        layer = graphics().createImageLayer(getImage());
+        initPreLoad(peaWorld);
+        getImage().addCallback(new Callback<Image>() {
+            @Override
+            public void onSuccess(Image image) {
+                // since the image is loaded, we can use its width and height
+                layer.setOrigin(image.width() / 2f, image.height() / 2f);
+                layer.setScale(width / image.width(), height / image.height());
+                layer.setTranslation(x, y);
+                layer.setRotation(angle);
+                initPostLoad(peaWorld);
+            }
 
-  /**
-   * Perform pre-image load initialization (e.g., attaching to PeaWorld layers).
-   *
-   * @param peaWorld
-   */
-  public abstract void initPreLoad(final PeaWorld peaWorld);
+            @Override
+            public void onFailure(Throwable cause) {
+                PlayN.log().error("Error loading image: " + cause.getMessage());
+            }
+        });
+    }
 
-  /**
-   * Perform post-image load initialization (e.g., attaching to PeaWorld layers).
-   *
-   * @param peaWorld
-   */
-  public abstract void initPostLoad(final PeaWorld peaWorld);
+    /**
+     * Perform pre-image load initialization (e.g., attaching to PeaWorld layers).
+     *
+     * @param peaWorld
+     */
+    public abstract void initPreLoad(final PeaWorld peaWorld);
 
-  public void paint(float alpha) {
-  }
+    /**
+     * Perform post-image load initialization (e.g., attaching to PeaWorld layers).
+     *
+     * @param peaWorld
+     */
+    public abstract void initPostLoad(final PeaWorld peaWorld);
 
-  public void update(float delta) {
-  }
+    public void paint(float alpha) {
+    }
 
-  public void setPos(float x, float y) {
-    layer.setTranslation(x, y);
-  }
+    public void update(float delta) {
+    }
 
-  public void setAngle(float a) {
-    layer.setRotation(a);
-  }
+    public void setPos(float x, float y) {
+        layer.setTranslation(x, y);
+    }
 
-  abstract float getWidth();
+    public void setAngle(float a) {
+        layer.setRotation(a);
+    }
 
-  abstract float getHeight();
+    final float getWidth() {
+        return width;
+    }
 
-  public abstract Image getImage();
+    final float getHeight() {
+        return height;
+    }
 
-  protected static Image loadImage(String name) {
-    return assets().getImage("images/" + name);
-  }
+    public abstract Image getImage();
+
+    protected static Image loadImage(String name) {
+        return assets().getImage("images/" + name);
+    }
 }

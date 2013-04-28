@@ -23,12 +23,13 @@ import playn.core.Image;
 public class Block extends StaticPhysicsEntity {
   public static String TYPE = "Block";
 
-  public Block(final PeaWorld peaWorld, World world, float x, float y, float angle) {
-    super(peaWorld, world, x, y, angle);
+  public Block(final PeaWorld peaWorld, World world, float x, float y, float width, float height, float angle) {
+      super(peaWorld, world, x, y, width, height, angle);
   }
 
+
   @Override
-  Body initPhysicsBody(World world, float x, float y, float angle) {
+  Body initPhysicsBody(World world, float x, float y, float width, float height, float angle) {
     FixtureDef fixtureDef = new FixtureDef();
     BodyDef bodyDef = new BodyDef();
     bodyDef.type = BodyType.STATIC;
@@ -37,8 +38,8 @@ public class Block extends StaticPhysicsEntity {
 
     PolygonShape polygonShape = new PolygonShape();
     Vec2[] polygon = new Vec2[4];
-    polygon[0] = new Vec2(-getWidth()/2f, -getHeight()/2f + getTopOffset());
-    polygon[1] = new Vec2(getWidth()/2f, -getHeight()/2f + getTopOffset());
+    polygon[0] = new Vec2(-getWidth()/2f, -getHeight()/2f);
+    polygon[1] = new Vec2(getWidth()/2f, -getHeight()/2f);
     polygon[2] = new Vec2(getWidth()/2f, getHeight()/2f);
     polygon[3] = new Vec2(-getWidth()/2f, getHeight()/2f);
     polygonShape.set(polygon, polygon.length);
@@ -51,27 +52,9 @@ public class Block extends StaticPhysicsEntity {
   }
 
   @Override
-  float getWidth() {
-    return 2.0f;
-  }
-
-  @Override
-  float getHeight() {
-    return 2.0f;
-  }
-
-  /**
-   * Return the size of the offset where the block is slightly lower than where
-   * the image is drawn for a depth effect
-   */
-  public float getTopOffset() {
-    return 2.0f / 8f;
-  }
-
-  @Override
   public Image getImage() {
     return image;
   }
 
-  private static Image image = loadImage("Block-Normal.png");
+  private static Image image = loadImage("block.png");
 }

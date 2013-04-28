@@ -17,29 +17,6 @@ public class Level {
 
     public void init() {
         // create and add background image layer
-        Image bgImage = assets().getImage("images/bg.png");
-        ImageLayer bgLayer = graphics().createImageLayer(bgImage);
-        graphics().rootLayer().add(bgLayer);
-        final Image pea = assets().getImage("images/pea.png");
-        ImmediateLayer imm = graphics().createImmediateLayer(width, height, new ImmediateLayer.Renderer() {
-            public void render(Surface surf) {
-//                surf.clear();
-                for (int i = 0; i < 100; ++i) {
-                    int x = (int) (random() * height);
-                    int y = (int) (random() * width);
-                    surf.drawImage(pea, x, y);
-                }
-
-                surf.setFillColor(0xFF00FF00);
-                surf.fillRect(0.5f, 1f, 2f, 0.5f);
-
-
-            }
-        });
-//        imm.setAlpha(1f);
-        imm.setTranslation(50, 50);
-        imm.setScale(10);
-        graphics().rootLayer().add(imm);
 
         Font font = graphics().createFont("Courier", Font.Style.BOLD, 16);
 
@@ -55,14 +32,5 @@ public class Level {
         graphics().rootLayer().add(textLayer);
 
     }
-
-    public void update(int delta) {
-
-    }
-
-    public void paint(float alpha) {
-        // the background automatically paints itself, so no need to do anything here!
-    }
-
 
 }

@@ -64,7 +64,7 @@ public class PeaWorld implements ContactListener {
     scaledLayer.add(staticLayerFront);
 
     // create the physics world
-    Vec2 gravity = new Vec2(0.0f, 10.0f);
+    Vec2 gravity = new Vec2(0.0f, LudumDare26Game.GRAVITY);
     world = new World(gravity);
     world.setWarmStarting(true);
     world.setAutoClearForces(true);
