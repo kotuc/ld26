@@ -28,11 +28,12 @@ public class LudumDare26Game extends Game.Default {
         ImmediateLayer imm = graphics().createImmediateLayer(WIDTH, HEIGHT, new ImmediateLayer.Renderer() {
             public void render(Surface surf) {
 //                surf.clear();
-                for (int i = 0; i < 100; ++i) {
-                    int x = (int) (random() * WIDTH);
-                    int y = (int) (random() * HEIGHT);
-                    surf.drawImage(pea, x, y);
-                }
+
+//                for (int i = 0; i < 100; ++i) {
+//                    int x = (int) (random() * WIDTH);
+//                    int y = (int) (random() * HEIGHT);
+//                    surf.drawImage(pea, x, y);
+//                }
 
                 surf.setFillColor(0xFF00FF00);
                 surf.fillRect(0.5f, 1f, 2f, 0.5f);
@@ -41,12 +42,11 @@ public class LudumDare26Game extends Game.Default {
             }
         });
 //        imm.setAlpha(1f);
-        imm.setTranslation(50, 50);
-        imm.setScale(2);
-        graphics().rootLayer().add(imm);
+//        imm.setTranslation(50, 50);
+//        imm.setScale(2);
+//        graphics().rootLayer().add(imm);
 
         Font font = graphics().createFont("Courier", Font.Style.BOLD, 16);
-
         String text = "Text can also be wrapped at a specified width.\n\n" +
                 "And wrapped manually at newlines.\nLike this.";
         TextLayout layout = graphics().layoutText(
@@ -65,17 +65,47 @@ public class LudumDare26Game extends Game.Default {
 
         world = new PeaWorld(worldLayer);
 
+        world.add(new Block(world, world.world, 5, 5, 0));
+
         // hook up our pointer listener
         pointer().setListener(new Pointer.Adapter() {
             @Override
             public void onPointerStart(Pointer.Event event) {
                 if (worldLoaded) {
-                    Pea pea = new Pea(world, world.world, event.x() / physUnitPerScreenUnit,
+                    Pea pea = new Pea(world, world.world,
+                            event.x() / physUnitPerScreenUnit,
                             event.y() / physUnitPerScreenUnit, 0);
                     world.add(pea);
                 }
             }
         });
+
+
+        keyboard().setListener(new Keyboard.Listener() {
+            @Override
+            public void onKeyDown(Keyboard.Event event) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void onKeyTyped(Keyboard.TypedEvent event) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void onKeyUp(Keyboard.Event event) {
+                switch (event.key()) {
+                    case LEFT:
+                        world.add(new Block(world, world.world, 3, 5, 0));
+                        break;
+                    case RIGHT:
+                        world.add(new Block(world, world.world, 7, 5, 0));
+                        break;
+
+                }
+            }
+        });
+
 
     }
 
