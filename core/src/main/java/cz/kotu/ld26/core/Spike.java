@@ -20,18 +20,20 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
 import playn.core.Image;
 import playn.core.PlayN;
+import playn.core.Sound;
 import playn.core.util.Callback;
 
 import static playn.core.PlayN.graphics;
 
-public class Box extends DynamicPhysicsEntity {
+public class Spike extends DynamicPhysicsEntity {
 
+    public static String TYPE = "Spike";
 
-    public static String TYPE = "Player";
+    public static final Sound SOUND_FALL = PlayN.assets().getSound("sounds/fall");
 
     float fallTime = Float.MAX_VALUE;
 
-    public Box(PeaWorld peaWorld, World world, float x, float y, float angle) {
+    public Spike(PeaWorld peaWorld, World world, float x, float y, float angle) {
         super(peaWorld, world, x, y, 1, 1, angle);
     }
 
@@ -90,7 +92,12 @@ public class Box extends DynamicPhysicsEntity {
         fallTime -= delta;
 
 
-        getBody().setType((fallTime < 0)?BodyType.DYNAMIC:BodyType.STATIC);
+        if (fallTime < 0 && getBody().getType() != BodyType.DYNAMIC) {
+            getBody().setType(BodyType.DYNAMIC);
+            SOUND_FALL.play();
+        }
+
+
 
     }
 

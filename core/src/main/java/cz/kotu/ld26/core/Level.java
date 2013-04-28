@@ -11,9 +11,7 @@ public abstract class Level {
     final int width = 20;
     final int height = 15;
 
-    public void init(PeaWorld world) {
-
-    }
+    public abstract void init(PeaWorld world);
 
 
 }

@@ -37,7 +37,7 @@ public abstract class LevelDef {
 
                 world.createBlock(2, 13, 18 - 2, 1);
 
-                Box spike = new Box(world, world.world, 3f + 15f, 1, 0);
+                Spike spike = new Spike(world, world.world, 3f + 15f, 1, 0);
                 spike.setFallTime(5);
                 world.add(spike);
             }
@@ -64,10 +64,16 @@ public abstract class LevelDef {
 
                 world.add(new Block(world, world.world, 3f + 15f, 10, 3, 1, 0));
 
-                Box spike = new Box(world, world.world, 3f + 15f, 1, 0);
-                spike.setFallTime(5);
 
-                world.add(spike);
+                for (int i = 0; i < 10; i++) {
+                    final Spike spike = new Spike(world, world.world, 3f + i, 1, 0);
+                    spike.setFallTime(2 + 0.2f*i);
+                    world.add(spike);
+                }
+
+
+
+
             }
         };
     }
@@ -88,7 +94,7 @@ public abstract class LevelDef {
                 world.createBlock(10, 2 + 5 + 1, 1, 5).setCollidable(false);
                 world.createBlock(2, 13, 18 - 2, 1);
 
-                Box spike = new Box(world, world.world, 3f + 15f, 1, 0);
+                Spike spike = new Spike(world, world.world, 3f + 15f, 1, 0);
                 spike.setFallTime(5);
                 world.add(spike);
             }
