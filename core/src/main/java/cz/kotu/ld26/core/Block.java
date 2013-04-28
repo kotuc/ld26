@@ -20,13 +20,12 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.*;
 import playn.core.Image;
 
-public class Block extends StaticPhysicsEntity {
+public class Block extends DynamicPhysicsEntity {
   public static String TYPE = "Block";
 
   public Block(final PeaWorld peaWorld, World world, float x, float y, float width, float height, float angle) {
       super(peaWorld, world, x, y, width, height, angle);
   }
-
 
   @Override
   Body initPhysicsBody(World world, float x, float y, float width, float height, float angle) {

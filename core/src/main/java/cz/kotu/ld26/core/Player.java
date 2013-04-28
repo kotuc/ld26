@@ -30,7 +30,7 @@ public class Player extends DynamicPhysicsEntity {
     }
 
     @Override
-    Body initPhysicsBody(World world, float x, float y, float angle) {
+    Body initPhysicsBody(World world, float x, float y, float width, float height, float angle) {
         FixtureDef fixtureDef = new FixtureDef();
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyType.DYNAMIC;

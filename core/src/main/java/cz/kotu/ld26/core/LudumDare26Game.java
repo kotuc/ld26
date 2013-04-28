@@ -26,8 +26,7 @@ public class LudumDare26Game extends Game.Default {
     private LudumDare26Game.ControlsState controlsState = new ControlsState();
 
     private int t = 0;
-    private Player player;
-    private Box spike;
+    private Level level;
 
     public LudumDare26Game() {
         super(33); // call update every 33ms (30 times per second)
@@ -70,7 +69,7 @@ public class LudumDare26Game extends Game.Default {
 
         world = new PeaWorld(worldLayer);
 
-        initLevel1();
+        resetLevel(0);
 
         // hook up our pointer listener
         pointer().setListener(new Pointer.Adapter() {
@@ -97,9 +96,9 @@ public class LudumDare26Game extends Game.Default {
                         controlsState.rightPressed = true;
                         break;
                     case UP: {
-                        Vec2 linearVelocity = player.getBody().getLinearVelocity();
+                        Vec2 linearVelocity = level.player.getBody().getLinearVelocity();
                         linearVelocity.y = JUMP_SPEED;
-                        player.getBody().setLinearVelocity(linearVelocity);
+                        level.player.getBody().setLinearVelocity(linearVelocity);
 
                         break;
                     }
@@ -115,10 +114,10 @@ public class LudumDare26Game extends Game.Default {
             public void onKeyUp(Keyboard.Event event) {
                 switch (event.key()) {
                     case K1:
-                        initLevel1();
+                        resetLevel(1);
                         break;
                     case K2:
-                        initLevel2();
+                        resetLevel(2);
                         break;
                     case LEFT:
                         controlsState.leftPressed = false;
@@ -148,52 +147,15 @@ public class LudumDare26Game extends Game.Default {
         graphics().rootLayer().add(textLayer);
     }
 
-    private void initLevel1() {
 
+    void resetLevel(int levelNum) {
         world.clearInit();
-
         t = 0;
 
-        world.add(new Block(world, world.world, 1, 1, 1, 1, 0));
-        world.add(new Block(world, world.world, 0, 0, 1, 1, 0));
+        this.level = LevelDef.getLevel(levelNum);
+        level.init(world);
 
-        world.add(new Block(world, world.world, 5, 5, 1, 1, 20));
-
-        player = new Player(world, world.world, 3, 10, 0);
-        world.add(player);
-
-        world.add(new Block(world, world.world, 3, 12, 1, 1, 0));
-
-        world.add(new Block(world, world.world, 3 + 8, 12, 3, 1, 0));
-
-        world.add(new Block(world, world.world, 3f + 3f, 10, 3, 1, 0));
-
-        world.add(new Block(world, world.world, 3f + 15f, 10, 3, 1, 0));
-
-        spike = new Box(world, world.world, 3f + 15f, 1, 0);
-
-        world.add(spike);
     }
-
-    private void initLevel2() {
-
-        world.clearInit();
-
-        t = 0;
-
-        world.add(new Block(world, world.world, 1, 1, 2, 1, 0));
-
-        world.add(new Block(world, world.world, 5, 5, 1, 1, 20));
-
-
-        player = new Player(world, world.world, 3, 10, 0);
-        world.add(player);
-
-        spike = new Box(world, world.world, 3f + 15f, 1, 0);
-
-        world.add(spike);
-    }
-
 
     @Override
     public void paint(float alpha) {
@@ -210,7 +172,7 @@ public class LudumDare26Game extends Game.Default {
 
             playerControl(delta);
 
-            world.update(delta);
+            world.update(delta/1000f);
 
             updateText("t" + t + "delta " + delta);
 
@@ -220,7 +182,7 @@ public class LudumDare26Game extends Game.Default {
     private void playerControl(int delta) {
         boolean doStop = !(controlsState.leftPressed || controlsState.rightPressed);
 
-        final Body body = player.getBody();
+        final Body body = level.player.getBody();
         float linearDamping = 0;
         if (doStop) {
             body.setAngularVelocity(0);

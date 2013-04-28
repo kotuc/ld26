@@ -24,7 +24,7 @@ import static playn.core.PlayN.assets;
 import static playn.core.PlayN.graphics;
 
 public abstract class Entity {
-    final ImageLayer layer;
+    ImageLayer layer;
     float x;
     float y;
     private final float width;
@@ -32,7 +32,7 @@ public abstract class Entity {
     float angle;
 
     public Entity(final PeaWorld peaWorld, float px, float py, float pangle) {
-           this(peaWorld, px, py, 1, 1, pangle);
+        this(peaWorld, px, py, 1, 1, pangle);
     }
 
     public Entity(final PeaWorld peaWorld, float px, float py, final float width, final float height, float pangle) {
@@ -41,6 +41,10 @@ public abstract class Entity {
         this.width = width;
         this.height = height;
         this.angle = pangle;
+        initLayer(peaWorld, width, height);
+    }
+
+    protected void initLayer(final PeaWorld peaWorld, final float width, final float height) {
         layer = graphics().createImageLayer(getImage());
         initPreLoad(peaWorld);
         getImage().addCallback(new Callback<Image>() {

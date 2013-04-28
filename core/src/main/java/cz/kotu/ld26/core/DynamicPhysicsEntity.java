@@ -29,12 +29,12 @@ public abstract class DynamicPhysicsEntity extends Entity implements PhysicsEnti
     public DynamicPhysicsEntity(PeaWorld peaWorld, World world, float x, float y, float width, float height, float angle) {
         super(peaWorld, x, y, width, height, angle);
         this.pworld = world;
-        body = initPhysicsBody(world, x, y, angle);
+        body = initPhysicsBody(world, x, y, width, height, angle);
         setPos(x, y);
         setAngle(angle);
     }
 
-    abstract Body initPhysicsBody(World world, float x, float y, float angle);
+    abstract Body initPhysicsBody(World world, float x, float y, float width, float height, float angle);
 
     @Override
     public void paint(float alpha) {
@@ -97,5 +97,6 @@ public abstract class DynamicPhysicsEntity extends Entity implements PhysicsEnti
 
     public void setCollidable(boolean collidable) {
         this.collidable = collidable;
+        layer.setAlpha(collidable?1f:0.5f);
     }
 }

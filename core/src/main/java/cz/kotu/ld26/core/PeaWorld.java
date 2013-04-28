@@ -186,4 +186,11 @@ public class PeaWorld implements ContactListener {
             remove(entity);
         }
     }
+
+    Block createBlock(float x, float y, float w, float h) {
+        final Block block = new Block(this, world, x + (w / 2f), y + (h / 2f), w, h, 0);
+        this.add(block);
+        return block;
+    }
+
 }
