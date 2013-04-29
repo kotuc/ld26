@@ -70,12 +70,12 @@ public class LudumDare26Game extends Game.Default {
         pointer().setListener(new Pointer.Adapter() {
             @Override
             public void onPointerStart(Pointer.Event event) {
-                if (worldLoaded) {
-                    Player player = new Player(world, world.world,
-                            event.x() / physUnitPerScreenUnit,
-                            event.y() / physUnitPerScreenUnit, 0);
-                    world.add(player);
-                }
+//                if (worldLoaded) {
+//                    Player player = new Player(world, world.world,
+//                            event.x() / physUnitPerScreenUnit,
+//                            event.y() / physUnitPerScreenUnit, 0);
+//                    world.add(player);
+//                }
             }
         });
 
@@ -107,11 +107,20 @@ public class LudumDare26Game extends Game.Default {
             @Override
             public void onKeyUp(Keyboard.Event event) {
                 switch (event.key()) {
-                    case K1:
-                        resetLevel(1);
+//                    case K1:
+//                        resetLevel(1);
+//                        break;
+//                    case K2:
+//                        resetLevel(2);
+//                        break;
+                    // TODO debug
+                    case P:
+                        levelNum--;
+                        resetLevel(levelNum);
                         break;
-                    case K2:
-                        resetLevel(2);
+                    case N:
+                        levelNum++;
+                        resetLevel(levelNum);
                         break;
                     case LEFT:
                         controlsState.leftPressed = false;
