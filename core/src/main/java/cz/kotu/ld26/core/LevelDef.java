@@ -11,6 +11,8 @@ public abstract class LevelDef {
                 return createFirstLevel();
             case 2:
                 return createSecondLevel();
+            case 3:
+                return createThirdLevel();
             default:
                 return createErrorLevel();
         }
@@ -18,7 +20,7 @@ public abstract class LevelDef {
 
 
     private static Level createFirstLevel() {
-        return new Level() {
+        return new Level("One") {
             public void init(PeaWorld world) {
 
                 world.add(new Block(world, world.world, 1, 1, 2, 1, 0));
@@ -50,7 +52,7 @@ public abstract class LevelDef {
     }
 
     private static Level createSecondLevel() {
-        return new Level() {
+        return new Level("Two") {
             public void init(PeaWorld world) {
 
                 world.add(new Block(world, world.world, 1, 1, 1, 1, 0));
@@ -83,8 +85,55 @@ public abstract class LevelDef {
         };
     }
 
+    private static Level createThirdLevel() {
+        return new Level("Three") {
+
+            private Block block;
+
+            public void init(PeaWorld world) {
+
+                world.add(new Block(world, world.world, 1, 1, 2, 1, 0));
+
+                world.add(new Block(world, world.world, 5, 5, 1, 1, 20));
+
+
+                player = new Player(world, world.world, 0.5f, 10, 0);
+                world.add(player);
+
+//        world.add(new Block(world, world.world, 5+5, 13, 15, 1, 0));
+
+
+                world.createBlock(10, 2, 1, 5);
+                block = world.createBlock(10, 2 + 5 + 1, 1, 5);
+                block.setCollidable(false);
+
+
+                world.createBlock(2, 13, 9 - 2, 1);
+
+                for (int i = 0; i < 5; i++) {
+                    world.createBlock(12+i, 13, 1, 1).setFallTime(5+i*0.2f);
+                }
+
+                Spike spike = new Spike(world, world.world, 3f + 15f, 1, 0);
+                spike.setFallTime(5);
+                world.add(spike);
+            }
+
+            @Override
+            public void update(float delta) {
+                super.update(delta);
+
+                block.setCollidable(5<time);
+            }
+        };
+
+
+
+    }
+
+
     private static Level createErrorLevel() {
-        return new Level() {
+        return new Level("Error ") {
             public void init(PeaWorld world) {
 
                 player = new Player(world, world.world, 3, 10, 0);

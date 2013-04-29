@@ -1,7 +1,5 @@
 package cz.kotu.ld26.core;
 
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.Body;
 import playn.core.*;
 
 import static playn.core.PlayN.*;
@@ -22,7 +20,6 @@ public class LudumDare26Game extends Game.Default {
 
     private LudumDare26Game.ControlsState controlsState = new ControlsState();
 
-    private int t = 0;
     private Level level;
     private int levelNum = 0;
 
@@ -150,7 +147,6 @@ public class LudumDare26Game extends Game.Default {
         this.levelNum = levelNum;
 
         world.clearInit();
-        t = 0;
 
         this.level = LevelDef.getLevel(levelNum);
         level.init(world);
@@ -165,28 +161,26 @@ public class LudumDare26Game extends Game.Default {
     }
 
     @Override
-    public void update(int delta) {
+    public void update(int deltams) {
+        float delta = deltams / 1000f;
         if (worldLoaded) {
 
             if (level.player.dead) {
                 resetLevel(levelNum);
             } else if (level.player.getBody().getPosition().x > 20) {
                 resetLevel(levelNum + 1);
+            } else {
+
+                level.player.playerControl(controlsState);
+
+                level.update(delta);
+
+                updateText(levelNum + " " + level.name + " t" + level.time + " delta " + delta);
+
+                world.update(delta);
             }
-
-
-
-            t += delta;
-
-            level.player.playerControl(controlsState);
-
-            world.update(delta/1000f);
-
-            updateText("t" + t + "delta " + delta);
-
         }
     }
-
 
 
     void updateText(String text) {
